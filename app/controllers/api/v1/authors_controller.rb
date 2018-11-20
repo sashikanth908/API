@@ -1,9 +1,9 @@
 class Api::V1::AuthorsController < ApplicationController
 
   def index
-    authors=Author.all
+    authors = Author.where("deleted_at IS ?", nil).all
     render json: authors, notice: :ok
-
+    #each_serializer: AuthorSerializer,
   end
 
   def create
@@ -14,41 +14,35 @@ class Api::V1::AuthorsController < ApplicationController
     else
       render json: author.errors
     end
-
   end
 
   def update
-    author=Author.find(params[:id])
+   author = Author.find(params[:id])
+
     if author.update(author_params)
       render json: author
-
     else
       render json: author.errors
-
     end
-
   end
 
   def show
     author=Author.find(params[:id])
-
   end
 
   def destroy
-    #deleted_at= Time.now
     author = Author.find(params[:id])
-   author=Author.find(author_params)
-   if author.destroy
+    author.deleted_at= Time.now
 
-    render json: author
-  else
-    render json:author.errors
-   end
-   end
+    if author.save
+      render json: author
+    else
+      render json:author.errors
+    end
+  end
 
   private
   def author_params
-    params.permit(:name, :age, :experience, :books, :email, :phNo, :timestamps, :deleted_at)
-
+    params.permit(:name, :age, :experience, :books, :email, :phNo, :deleted_at)
   end
 end

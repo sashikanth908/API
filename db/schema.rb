@@ -19,7 +19,6 @@ ActiveRecord::Schema.define(version: 2018_11_16_064435) do
     t.string "books"
     t.string "email"
     t.string "phNo"
-    t.time "timestamps"
     t.time "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
